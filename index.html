@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unwanted Feelings</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(to top,#0b0f1a 40%,#101a2b 100%);
+    color:white;
+}
+
+/* Moon */
+.moon{
+    position:absolute;
+    top:8%;
+    right:15%;
+    width:140px;
+    height:140px;
+    background:radial-gradient(circle,#fff 40%,#ddd 60%,transparent 70%);
+    border-radius:50%;
+    box-shadow:0 0 60px rgba(255,255,255,0.7);
+    opacity:.9;
+}
+
+/* Stars */
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+    from{opacity:.2;}
+    to{opacity:1;}
+}
+
+/* Hills */
+.hill{
+    position:absolute;
+    bottom:0;
+    width:120%;
+    height:40%;
+    background:#0a0d14;
+    border-radius:50% 50% 0 0;
+}
+
+.hill2{
+    position:absolute;
+    bottom:0;
+    width:120%;
+    height:30%;
+    background:#06080f;
+    border-radius:50% 50% 0 0;
+}
+
+/* Campfire */
+.fire{
+    position:absolute;
+    bottom:18%;
+    left:50%;
+    transform:translateX(-50%);
+    width:20px;
+    height:40px;
+    background:radial-gradient(circle at 50% 80%, orange, red);
+    border-radius:50% 50% 40% 40%;
+    animation:flicker .2s infinite alternate;
+    box-shadow:0 0 30px rgba(255,120,0,0.8);
+}
+
+@keyframes flicker{
+    from{transform:translateX(-50%) scale(1);}
+    to{transform:translateX(-50%) scale(1.1);}
+}
+
+/* Card */
+.container{
+    position:relative;
+    z-index:10;
+    width:90%;
+    max-width:650px;
+    padding:50px;
+    border-radius:25px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(15px);
+    text-align:center;
+    box-shadow:0 0 60px rgba(0,0,0,0.5);
+    transition:1.5s;
+}
+
+h2{
+    font-weight:300;
+    letter-spacing:3px;
+    margin-bottom:30px;
+    opacity:.8;
+}
+
+#text{
+    min-height:150px;
+    font-size:20px;
+    line-height:1.8;
+    transition:1s;
+}
+
+/* Button */
+button{
+    margin-top:25px;
+    padding:12px 35px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#111;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.08);
+}
+
+/* Slide animations */
+.fade{animation:fade .8s;}
+.slide{animation:slide .8s;}
+.zoom{animation:zoom .8s;}
+.blur{animation:blur .8s;}
+
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+@keyframes slide{from{transform:translateY(25px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+@keyframes zoom{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+@keyframes blur{from{filter:blur(6px);opacity:0;}to{filter:blur(0);opacity:1;}}
+
+/* Ending effect */
+body.final{
+    background:black;
+}
+
+body.final .moon{
+    opacity:0.3;
+}
+
+body.final #text{
+    font-size:28px;
+}
+
+body.final .container{
+    background:rgba(0,0,0,0.7);
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" loop>
+        <source src="Take Me Home, Country Roads - John Denver (Piano Cover by Riyandi Kusuma).mp3" type="audio/mpeg">
+    </audio>
+    
+<div class="moon"></div>
+<div class="hill"></div>
+<div class="hill2"></div>
+<div class="fire"></div>
+
+<div class="container">
+    <h2>Unwanted Feelings</h2>
+    <div id="text"></div>
+    <button onclick="nextSlide()" id="btn">Lanjut</button>
+</div>
+
+<script>
+
+/* STARS */
+for(let i=0;i<80;i++){
+    let star=document.createElement("div");
+    star.className="star";
+    star.style.top=Math.random()*70+"%";
+    star.style.left=Math.random()*100+"%";
+    star.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(star);
+}
+
+const slides=[
+"Sebenernya aku tuh gak mau jadi kayak gini.",
+"Aku cuma gak tau kenapa rasanya sekarang beda.",
+"Cemburu yang dulu gak pernah ada… sekarang sering muncul diam-diam.",
+"Aku kangen versi diriku yang santai dan gak overthinking.",
+"Maaf ya kalau sikapku bikin kamu risih.",
+"Aku lagi belajar ngatur perasaan ini pelan-pelan.",
+"Bukan karena aku mau ngatur kamu… tapi karena aku terlalu peduli.",
+"Aku cuma takut kehilangan sesuatu yang bahkan belum tentu milikku.",
+"Aku ingin semuanya terasa ringan lagi.",
+"I just want to be with you like a normal friend.",
+"Is that what you want too right?"
+];
+
+const effects=["fade","slide","zoom","blur"];
+let current=0;
+
+const text=document.getElementById("text");
+const btn=document.getElementById("btn");
+const bgm=document.getElementById("bgm");
+
+function showSlide(){
+    text.className="";
+    void text.offsetWidth;
+    text.classList.add(effects[current%effects.length]);
+    text.innerHTML=slides[current];
+}
+
+function nextSlide(){
+
+    if(current===0){
+        bgm.play(); // musik mulai saat klik pertama
+    }
+
+    if(current<slides.length-1){
+        current++;
+        showSlide();
+    }else{
+        document.body.classList.add("final");
+        btn.innerHTML="...";
+        setTimeout(()=>{
+            btn.style.opacity=0;
+        },1500);
+    }
+}
+
+showSlide();
+
+</script>
+
+
+</body>
+</html>
